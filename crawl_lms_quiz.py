@@ -66,16 +66,13 @@ def main():
 	sessionID = input('Enter the MoodleSession cookie: ')
 	fileDes = input('Enter filename to save: ')
 
-	# try:		
-	# 	questions = make_questions_answers(url_list, sessionID)
-	# 	add_to_file(questions, fileDes)
-	# 	print("Done!")
-	# except Exception as e:
-	# 	print('Error(s) occured: ' + str(e))
+	try:		
+		questions = make_questions_answers(url_list, sessionID)
+		add_to_file(questions, fileDes)
+		print("Done!")
+	except Exception as e:
+		print('Error(s) occured: ' + str(e))
 
-	questions = make_questions_answers(url_list, sessionID)
-	add_to_file(questions, fileDes)
-	print("Done!")
 
 
 main()
