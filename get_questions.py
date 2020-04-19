@@ -8,7 +8,7 @@ def get_beautifulsoup(url, sessionID):
 
 
 def process_beautifulsoup(beautiful_soup_html):
-	results = [] # [{"question": "", "choices":[], "right answer": [] }]
+	results = [] # [{"question": "", "choices":[], "right answer": "" }]
 	doc = beautiful_soup_html
 
 	# get all questions and their correct answer
