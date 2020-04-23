@@ -69,7 +69,7 @@ def add_to_file(questions, filename):
 
 
 def get_url_list():
-	return re.split(r'\s{0,},\s{0,}', input('Enter url(s) to LMS quizzes [delimeter by \',\']: '))
+	return re.split(r'\s{0,},\s{0,}', input('Enter quizlet url(s) [delimeter by \',\']: '))
 
 
 def main():
