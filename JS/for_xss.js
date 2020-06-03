@@ -12,6 +12,6 @@ xhttp.open("GET", "/administrator/index.php?option=com_templates&view=template&i
 xhttp.send();
 var parser = new DOMParser();
 var xmlDoc = parser.parseFromString(response1, 'text/html'); //Firefox: text/html, Chrome: text/xml
-var token = xmlDoc.querySelector('#adminForm > input[type=hidden]:nth-child(3)').name;
+var token = xmlDoc.querySelector('<selector for csrf token>').name;
 
 
