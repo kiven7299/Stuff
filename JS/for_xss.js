@@ -1,5 +1,5 @@
 /* 
-Get csrf token
+	Get csrf token
 */
 var xhttp = new XMLHttpRequest();
 var response1 = "";
