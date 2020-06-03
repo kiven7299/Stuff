@@ -15,3 +15,5 @@ var xmlDoc = parser.parseFromString(response1, 'text/html'); //Firefox: text/htm
 var token = xmlDoc.querySelector('<selector for csrf token>').name;
 
 
+/* redirect */
+<meta http-equiv="refresh" content="0;URL=http://google.com">
