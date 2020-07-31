@@ -28,10 +28,8 @@ def get_choices_and_right_answer(bs4_doc, nth, is_ans_available):
 def make_questions_answers(url_list, sessionID, is_ans_available):
 	results = [] # [{"question": "", "choices":[], "right answer": "" }]
 	all_questions = set()
-
 	# get all questions and their correct answer from urls
 	for url in url_list:
-
 		# get beutifulsoup
 		doc = get_beautifulsoup(url, sessionID)
 		questions = doc.find_all("div", {"class", "qtext"})
@@ -40,10 +38,8 @@ def make_questions_answers(url_list, sessionID, is_ans_available):
 			if question not in all_questions:
 
 				# get question, answers and choices
-				# choices = doc.select("#q{} > div.content > div.formulation.clearfix > div.ablock > div.answer > div > label".format(i + 1))
-				# ans = doc.select("#q{} > div.content > div.outcome.clearfix > div > div.rightanswer".format(i + 1))
 				choices, ans = get_choices_and_right_answer(doc, i + 1, is_ans_available)
-
+				
 				# process a question
 				a_question = {} #the dict in 'results' variable
 				temp_list = [] #list to store choices
@@ -58,8 +54,6 @@ def make_questions_answers(url_list, sessionID, is_ans_available):
 				# post process
 				all_questions.add(question) # add the question to all_question set
 				results.append(a_question)
-
-
 	return results
 
 
@@ -89,9 +83,5 @@ def main():
 		print("Done!")
 	except Exception as e:
 		print('Error(s) occured: ' + str(e))
-
-	# questions = make_questions_answers(url_list, sessionID, is_ans_available)
-	# add_to_file(questions, fileDes)
-	# print("Done!")
 
 main()
