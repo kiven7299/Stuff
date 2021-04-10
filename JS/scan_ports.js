@@ -7,11 +7,12 @@ var check_port = function (target, port, timeout, callback=call_back) {
 	
 	var timeout = (timeout == null)?100:timeout;
 	var img = new Image();
+	var timeout = false
 	
 	img.onerror = function () {
-		if (!img) return;
+		if (!img || timeout) return;
 		img = undefined;
-		callback(port, 'open');
+		//callback(port, 'cannot-connect');
 	};
 	
 	img.onload = img.onerror;
@@ -20,7 +21,7 @@ var check_port = function (target, port, timeout, callback=call_back) {
 	setTimeout(function () {
 		if (!img) return;
 		img = undefined;
-		callback(port, 'closed');
+		//callback(port, 'open');
 	}, timeout);
 };
 
